@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speed-Flo Filter Industries</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #e8231a;
+    --orange: #f26522;
+    --dark: #1a1a1a;
+    --gray: #333;
+    --light-gray: #f4f4f4;
+    --white: #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background: var(--white);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 48px;
+    background: rgba(26,26,26,0.96);
+    backdrop-filter: blur(6px);
+    border-bottom: 2px solid var(--red);
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-logo-text {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--red);
+    text-shadow: 0 0 12px rgba(232,35,26,0.4);
+    font-style: italic;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #ccc;
+    transition: color 0.25s;
+  }
+
+  .nav-links a:hover { color: var(--orange); }
+
+  /* ── SECTION BASE ── */
+  section {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── CORNER DECORATION (top-right dark + orange sweep) ── */
+  .corner-deco {
+    position: absolute;
+    top: 0; right: 0;
+    width: 220px; height: 200px;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .corner-deco svg { width: 100%; height: 100%; }
+
+  /* ── BOTTOM WAVE (orange) ── */
+  .bottom-wave {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 90px;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  /* ── PAGE 1: WELCOME ── */
+  #welcome {
+    background: linear-gradient(160deg, #f9f9f9 60%, #ececec 100%);
+    justify-content: center;
+    align-items: center;
+    padding-top: 80px;
+  }
+
+  .welcome-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 60px 40px 30px;
+    max-width: 780px;
+  }
+
+  .welcome-label {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--dark);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .brand-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(3.5rem, 9vw, 6rem);
+    font-weight: 700;
+    font-style: italic;
+    letter-spacing: 4px;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--red) 0%, var(--orange) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    filter: drop-shadow(2px 4px 8px rgba(232,35,26,0.25));
+    margin-bottom: 4px;
+  }
+
+  .brand-subtitle {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--dark);
+    margin-bottom: 36px;
+  }
+
+  /* ── FILTER IMAGE CLUSTER ── */
+  .filters-img-wrap {
+    width: 100%;
+    max-width: 560px;
+    margin: 0 auto 36px;
+    position: relative;
+  }
+
+  .filters-img-wrap img {
+    width: 100%;
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(0 12px 32px rgba(0,0,0,0.18));
+  }
+
+  .welcome-divider {
+    width: 60px; height: 3px;
+    background: linear-gradient(90deg, var(--red), var(--orange));
+    border-radius: 2px;
+    margin: 0 auto 24px;
+  }
+
+  .welcome-tagline {
+    font-size: 1rem;
+    color: var(--gray);
+    line-height: 1.75;
+    max-width: 520px;
+  }
+
+  .welcome-tagline strong { color: var(--dark); }
+
+  /* ── PAGE 2: SERVICES ── */
+  #services {
+    background: linear-gradient(160deg, #f9f9f9 55%, #ececec 100%);
+    justify-content: center;
+    align-items: center;
+    padding-top: 80px;
+  }
+
+  .services-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 60px 40px 30px;
+    max-width: 780px;
+  }
+
+  .section-label {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--dark);
+    margin-bottom: 4px;
+  }
+
+  .services-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    width: 100%;
+    max-width: 560px;
+    margin-top: 32px;
+  }
+
+  .svc-card {
+    border-top: 1px solid #d5d5d5;
+    padding: 20px 0;
+    text-align: center;
+  }
+
+  .svc-card:last-child { border-bottom: 1px solid #d5d5d5; }
+
+  .svc-main {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--dark);
+  }
+
+  .svc-main strong {
+    color: var(--red);
+    font-size: 1.08rem;
+  }
+
+  .svc-highlight {
+    color: var(--red);
+    font-weight: 700;
+  }
+
+  .svc-sub {
+    color: var(--orange);
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  /* ── PAGE 3: CONTACT ── */
+  #contact {
+    background: linear-gradient(160deg, #f9f9f9 55%, #ececec 100%);
+    justify-content: center;
+    align-items: center;
+    padding-top: 80px;
+  }
+
+  .contact-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 60px 40px 50px;
+    max-width: 700px;
+  }
+
+  .contact-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+    max-width: 600px;
+    margin-top: 36px;
+  }
+
+  .contact-card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 24px 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    text-align: left;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    border-left: 4px solid var(--red);
+  }
+
+  .contact-card.full {
+    grid-column: 1 / -1;
+  }
+
+  .c-icon {
+    width: 36px; height: 36px;
+    min-width: 36px;
+    background: linear-gradient(135deg, var(--red), var(--orange));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .c-icon svg {
+    width: 18px; height: 18px;
+    fill: white;
+  }
+
+  .c-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 6px;
+  }
+
+  .c-value {
+    font-size: 0.9rem;
+    color: var(--gray);
+    line-height: 1.6;
+  }
+
+  /* ── BOTTOM ORANGE WAVE DECORATION ── */
+  .wave-bottom {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark);
+    color: #aaa;
+    text-align: center;
+    padding: 18px 20px;
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+  }
+
+  footer span { color: var(--orange); }
+
+  /* ── ANIMATIONS ── */
+  .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    nav { padding: 12px 20px; }
+    .nav-links { gap: 18px; }
+    .nav-links a { font-size: 0.75rem; }
+    .contact-cards { grid-template-columns: 1fr; }
+    .contact-card.full { grid-column: 1; }
+    .welcome-inner, .services-inner, .contact-inner { padding: 60px 20px 30px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <span class="nav-logo-text">SPEED-FLO</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#welcome">Home</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════════ PAGE 1: WELCOME ══════════════ -->
+<section id="welcome">
+  <!-- top-right corner decoration -->
+  <div class="corner-deco">
+    <svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
+      <path d="M220 0 L0 0 L220 130 Z" fill="#1a1a1a"/>
+      <path d="M220 0 L220 200 L60 200 Z" fill="#1a1a1a" opacity="0.5"/>
+      <path d="M220 80 Q160 120 220 200" stroke="#e8231a" stroke-width="10" fill="none"/>
+      <path d="M220 60 Q150 110 220 180" stroke="#f26522" stroke-width="6" fill="none" opacity="0.7"/>
+      <path d="M220 40 Q140 100 220 160" stroke="#f26522" stroke-width="3" fill="none" opacity="0.4"/>
+    </svg>
+  </div>
+
+  <div class="welcome-inner">
+    <p class="welcome-label fade-in">Welcome to</p>
+    <div class="brand-name fade-in" style="transition-delay:0.1s">SPEED-FLO</div>
+    <p class="brand-subtitle fade-in" style="transition-delay:0.2s">Speed-Flo Filter Industries</p>
+
+    <!-- Filter products image cluster (SVG-drawn representation) -->
+    <div class="filters-img-wrap fade-in" style="transition-delay:0.3s">
+      <svg viewBox="0 0 560 360" xmlns="http://www.w3.org/2000/svg" aria-label="Speed-Flo filter products">
+        <!-- Background subtle shadow platform -->
+        <ellipse cx="280" cy="330" rx="240" ry="24" fill="rgba(0,0,0,0.09)"/>
+
+        <!-- === FILTER 1: Large cylindrical air filter (tan/brown) center-back === -->
+        <rect x="230" y="40" width="80" height="200" rx="10" fill="#c8924a"/>
+        <rect x="226" y="36" width="88" height="18" rx="5" fill="#a86e28"/>
+        <rect x="226" y="220" width="88" height="18" rx="5" fill="#a86e28"/>
+        <!-- mesh texture lines -->
+        <line x1="240" y1="54" x2="240" y2="220" stroke="#b07830" stroke-width="1" opacity="0.5"/>
+        <line x1="255" y1="54" x2="255" y2="220" stroke="#b07830" stroke-width="1" opacity="0.5"/>
+        <line x1="270" y1="54" x2="270" y2="220" stroke="#b07830" stroke-width="1" opacity="0.5"/>
+        <line x1="285" y1="54" x2="285" y2="220" stroke="#b07830" stroke-width="1" opacity="0.5"/>
+        <line x1="300" y1="54" x2="300" y2="220" stroke="#b07830" stroke-width="1" opacity="0.5"/>
+
+        <!-- === FILTER 2: Orange cylindrical filter left-back === -->
+        <rect x="130" y="80" width="60" height="160" rx="8" fill="#e8541a"/>
+        <rect x="127" y="76" width="66" height="14" rx="4" fill="#c43d0a"/>
+        <rect x="127" y="228" width="66" height="14" rx="4" fill="#c43d0a"/>
+
+        <!-- === FILTER 3: White pleated filter, right of center === -->
+        <rect x="330" y="90" width="55" height="150" rx="7" fill="#e8e8e8"/>
+        <rect x="327" y="86" width="61" height="14" rx="4" fill="#cccccc"/>
+        <rect x="327" y="234" width="61" height="14" rx="4" fill="#cccccc"/>
+        <!-- pleats -->
+        <line x1="340" y1="100" x2="340" y2="234" stroke="#bbb" stroke-width="1"/>
+        <line x1="350" y1="100" x2="350" y2="234" stroke="#bbb" stroke-width="1"/>
+        <line x1="360" y1="100" x2="360" y2="234" stroke="#bbb" stroke-width="1"/>
+        <line x1="370" y1="100" x2="370" y2="234" stroke="#bbb" stroke-width="1"/>
+
+        <!-- === FILTER 4: Spin-on oil filter front-left (dark/metal) === -->
+        <rect x="60" y="160" width="58" height="110" rx="29" fill="#5a5a5a"/>
+        <rect x="70" y="155" width="38" height="18" rx="5" fill="#888"/>
+        <rect x="74" y="261" width="30" height="10" rx="4" fill="#444"/>
+        <circle cx="89" cy="265" r="6" fill="#222"/>
+        <!-- SPEED-O label small -->
+        <rect x="65" y="185" width="48" height="28" rx="3" fill="#1a3a6a"/>
+        <text x="89" y="203" text-anchor="middle" fill="white" font-size="7" font-family="Arial" font-weight="bold">SPEED●O</text>
+
+        <!-- === FILTER 5: Red box-panel filter flat square (left) === -->
+        <rect x="80" y="255" width="90" height="60" rx="5" fill="#e8231a"/>
+        <rect x="85" y="260" width="80" height="50" rx="3" fill="#cc1a12"/>
+        <text x="125" y="285" text-anchor="middle" fill="white" font-size="9" font-family="Arial" font-weight="bold">SPEED●O</text>
+        <text x="125" y="298" text-anchor="middle" fill="#ffcc00" font-size="7" font-family="Arial">Air Filter</text>
+
+        <!-- === FILTER 6: Spin-on oil filter front-right large (black) === -->
+        <rect x="400" y="170" width="65" height="120" rx="32" fill="#2a2a2a"/>
+        <rect x="412" y="162" width="41" height="20" rx="5" fill="#555"/>
+        <rect x="416" y="280" width="33" height="12" rx="5" fill="#111"/>
+        <circle cx="432" cy="285" r="7" fill="#000"/>
+        <rect x="408" y="195" width="48" height="26" rx="3" fill="#1a3a6a"/>
+        <text x="432" y="212" text-anchor="middle" fill="white" font-size="7" font-family="Arial" font-weight="bold">SPEED●O</text>
+
+        <!-- === FILTER 7: Panel air filter flat in middle-front === -->
+        <rect x="180" y="255" width="110" height="65" rx="5" fill="#2a2a2a"/>
+        <rect x="185" y="260" width="100" height="55" rx="3" fill="#1a1a1a"/>
+        <!-- mesh grid -->
+        <line x1="200" y1="265" x2="200" y2="310" stroke="#444" stroke-width="1"/>
+        <line x1="215" y1="265" x2="215" y2="310" stroke="#444" stroke-width="1"/>
+        <line x1="230" y1="265" x2="230" y2="310" stroke="#444" stroke-width="1"/>
+        <line x1="245" y1="265" x2="245" y2="310" stroke="#444" stroke-width="1"/>
+        <line x1="260" y1="265" x2="260" y2="310" stroke="#444" stroke-width="1"/>
+        <line x1="275" y1="265" x2="275" y2="310" stroke="#444" stroke-width="1"/>
+        <text x="235" y="290" text-anchor="middle" fill="white" font-size="8" font-family="Arial" font-weight="bold">SPEED-O</text>
+        <text x="235" y="302" text-anchor="middle" fill="#f26522" font-size="7" font-family="Arial">Air Filter</text>
+
+        <!-- === FILTER 8: Oil filter can center front === -->
+        <rect x="300" y="260" width="75" height="55" rx="5" fill="#1a3a6a"/>
+        <rect x="305" y="265" width="65" height="45" rx="3" fill="#122d55"/>
+        <text x="337" y="285" text-anchor="middle" fill="white" font-size="8" font-family="Arial" font-weight="bold">SPEED-O</text>
+        <text x="337" y="298" text-anchor="middle" fill="#f26522" font-size="7" font-family="Arial">Oil Filter</text>
+
+        <!-- === FILTER 9: Tall slim yellow/grey fuel filter right-back === -->
+        <rect x="395" y="60" width="40" height="130" rx="8" fill="#d4c36a"/>
+        <rect x="392" y="56" width="46" height="12" rx="4" fill="#b8a440"/>
+        <rect x="392" y="184" width="46" height="12" rx="4" fill="#b8a440"/>
+
+        <!-- === Small red product boxes background scattered === -->
+        <!-- box left-back -->
+        <rect x="38" y="130" width="44" height="60" rx="4" fill="#e8231a"/>
+        <text x="60" y="155" text-anchor="middle" fill="white" font-size="7" font-family="Arial" font-weight="bold">SPEED</text>
+        <rect x="43" y="162" width="34" height="20" rx="2" fill="#cc1a12"/>
+        <text x="60" y="175" text-anchor="middle" fill="white" font-size="6" font-family="Arial">ArFilse</text>
+
+        <!-- box right-back -->
+        <rect x="455" y="110" width="44" height="62" rx="4" fill="#e8231a"/>
+        <text x="477" y="136" text-anchor="middle" fill="white" font-size="7" font-family="Arial" font-weight="bold">SPEED●O</text>
+        <rect x="460" y="142" width="34" height="22" rx="2" fill="#cc1a12"/>
+        <text x="477" y="157" text-anchor="middle" fill="white" font-size="6" font-family="Arial">ArFilo</text>
+      </svg>
+    </div>
+
+    <div class="welcome-divider fade-in" style="transition-delay:0.4s"></div>
+
+    <p class="welcome-tagline fade-in" style="transition-delay:0.5s">
+      Welcome to <strong>Speed-Flo Filter Industries!</strong><br>
+      We are Pakistan's <strong>leading manufacturer</strong> of high-quality filters for
+      cars, trucks, buses, heavy machinery, and industrial equipment.
+      Count on us for <strong>reliable filtration</strong> solutions to meet your needs.
+    </p>
+  </div>
+
+  <!-- Bottom orange swoosh wave -->
+  <div class="wave-bottom">
+    <svg viewBox="0 0 1440 90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:90px;">
+      <path d="M0,60 Q360,0 720,40 Q1080,80 1440,20 L1440,90 L0,90 Z" fill="#f26522"/>
+      <path d="M0,70 Q400,20 800,55 Q1100,80 1440,35 L1440,90 L0,90 Z" fill="#e8231a" opacity="0.7"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ══════════════ PAGE 2: SERVICES ══════════════ -->
+<section id="services">
+  <div class="corner-deco">
+    <svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
+      <path d="M220 0 L0 0 L220 130 Z" fill="#1a1a1a"/>
+      <path d="M220 0 L220 200 L60 200 Z" fill="#1a1a1a" opacity="0.5"/>
+      <path d="M220 80 Q160 120 220 200" stroke="#e8231a" stroke-width="10" fill="none"/>
+      <path d="M220 60 Q150 110 220 180" stroke="#f26522" stroke-width="6" fill="none" opacity="0.7"/>
+    </svg>
+  </div>
+
+  <div class="services-inner">
+    <p class="section-label fade-in">Our Services</p>
+    <div class="brand-name fade-in" style="transition-delay:0.1s">SPEED-FLO</div>
+    <p class="brand-subtitle fade-in" style="transition-delay:0.2s">Speed-Flo Filter Industries</p>
+
+    <!-- Reuse the same filter cluster SVG -->
+    <div class="filters-img-wrap fade-in" style="transition-delay:0.3s; max-width:460px;">
+      <svg viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg" aria-label="Speed-Flo filter products">
+        <ellipse cx="280" cy="278" rx="220" ry="18" fill="rgba(0,0,0,0.08)"/>
+        <!-- Large air filter center -->
+        <rect x="230" y="30" width="80" height="180" rx="10" fill="#c8924a"/>
+        <rect x="226" y="26" width="88" height="16" rx="5" fill="#a86e28"/>
+        <rect x="226" y="204" width="88" height="16" rx="5" fill="#a86e28"/>
+        <line x1="242" y1="44" x2="242" y2="204" stroke="#b07830" stroke-width="1" opacity="0.5"/>
+        <line x1="257" y1="44" x2="257" y2="204" stroke="#b07830" stroke-width="1" opacity="0.5"/>
+        <line x1="272" y1="44" x2="272" y2="204" stroke="#b07830" stroke-width="1" opacity="0.5"/>
+        <line x1="287" y1="44" x2="287" y2="204" stroke="#b07830" stroke-width="1" opacity="0.5"/>
+        <line x1="302" y1="44" x2="302" y2="204" stroke="#b07830" stroke-width="1" opacity="0.5"/>
+        <!-- Labels on center filter -->
+        <rect x="238" y="90" width="64" height="40" rx="4" fill="#1a3a6a"/>
+        <text x="270" y="108" text-anchor="middle" fill="white" font-size="9" font-family="Arial" font-weight="bold">SPEED-FLO</text>
+        <text x="270" y="122" text-anchor="middle" fill="#f26522" font-size="8" font-family="Arial">Air Filter</text>
+        <!-- Orange filter left -->
+        <rect x="140" y="64" width="58" height="150" rx="8" fill="#e8541a"/>
+        <rect x="137" y="60" width="64" height="13" rx="4" fill="#c43d0a"/>
+        <rect x="137" y="208" width="64" height="13" rx="4" fill="#c43d0a"/>
+        <rect x="148" y="105" width="42" height="36" rx="3" fill="#cc3a0a"/>
+        <text x="169" y="122" text-anchor="middle" fill="white" font-size="8" font-family="Arial" font-weight="bold">SPEED</text>
+        <text x="169" y="134" text-anchor="middle" fill="#ffcc00" font-size="7" font-family="Arial">ArFilo</text>
+        <!-- White pleated right -->
+        <rect x="334" y="72" width="55" height="148" rx="7" fill="#e8e8e8"/>
+        <rect x="331" y="68" width="61" height="13" rx="4" fill="#ccc"/>
+        <rect x="331" y="214" width="61" height="13" rx="4" fill="#ccc"/>
+        <line x1="344" y1="82" x2="344" y2="214" stroke="#bbb" stroke-width="1.5"/>
+        <line x1="354" y1="82" x2="354" y2="214" stroke="#bbb" stroke-width="1.5"/>
+        <line x1="364" y1="82" x2="364" y2="214" stroke="#bbb" stroke-width="1.5"/>
+        <line x1="374" y1="82" x2="374" y2="214" stroke="#bbb" stroke-width="1.5"/>
+        <!-- Black spin-on left front -->
+        <rect x="66" y="148" width="56" height="100" rx="28" fill="#3a3a3a"/>
+        <rect x="76" y="142" width="36" height="16" rx="5" fill="#666"/>
+        <circle cx="94" cy="244" r="7" fill="#111"/>
+        <rect x="72" y="172" width="44" height="26" rx="3" fill="#1a3a6a"/>
+        <text x="94" y="189" text-anchor="middle" fill="white" font-size="7" font-family="Arial" font-weight="bold">SPEED●O</text>
+        <!-- Black spin-on right -->
+        <rect x="410" y="148" width="64" height="115" rx="32" fill="#1a1a1a"/>
+        <rect x="422" y="140" width="40" height="18" rx="5" fill="#444"/>
+        <circle cx="442" cy="258" r="8" fill="#000"/>
+        <!-- Panel filter bottom center -->
+        <rect x="182" y="236" width="106" height="54" rx="5" fill="#1a1a1a"/>
+        <line x1="198" y1="244" x2="198" y2="284" stroke="#444" stroke-width="1"/>
+        <line x1="212" y1="244" x2="212" y2="284" stroke="#444" stroke-width="1"/>
+        <line x1="226" y1="244" x2="226" y2="284" stroke="#444" stroke-width="1"/>
+        <line x1="240" y1="244" x2="240" y2="284" stroke="#444" stroke-width="1"/>
+        <line x1="254" y1="244" x2="254" y2="284" stroke="#444" stroke-width="1"/>
+        <line x1="268" y1="244" x2="268" y2="284" stroke="#444" stroke-width="1"/>
+        <text x="235" y="263" text-anchor="middle" fill="white" font-size="8" font-family="Arial" font-weight="bold">SPEED-O</text>
+        <text x="235" y="277" text-anchor="middle" fill="#f26522" font-size="7" font-family="Arial">Air Filter</text>
+        <!-- Oil filter box bottom right -->
+        <rect x="296" y="238" width="80" height="52" rx="5" fill="#1a3a6a"/>
+        <text x="336" y="260" text-anchor="middle" fill="white" font-size="8" font-family="Arial" font-weight="bold">SPEDFLO</text>
+        <text x="336" y="276" text-anchor="middle" fill="#f26522" font-size="7" font-family="Arial">Oil Filter</text>
+        <!-- Red boxes background -->
+        <rect x="40" y="114" width="42" height="58" rx="4" fill="#e8231a"/>
+        <text x="61" y="140" text-anchor="middle" fill="white" font-size="7" font-family="Arial" font-weight="bold">SPEED-FLO</text>
+        <rect x="45" y="148" width="32" height="18" rx="2" fill="#cc1212"/>
+        <text x="61" y="160" text-anchor="middle" fill="white" font-size="6" font-family="Arial">Air Filter</text>
+        <rect x="454" y="96" width="42" height="58" rx="4" fill="#e8231a"/>
+        <text x="475" y="124" text-anchor="middle" fill="white" font-size="7" font-family="Arial" font-weight="bold">SPEED●O</text>
+        <rect x="459" y="130" width="32" height="18" rx="2" fill="#cc1212"/>
+        <text x="475" y="142" text-anchor="middle" fill="white" font-size="6" font-family="Arial">ArFilo</text>
+      </svg>
+    </div>
+
+    <div class="welcome-divider fade-in" style="transition-delay:0.35s"></div>
+
+    <div class="services-cards fade-in" style="transition-delay:0.4s">
+      <div class="svc-card">
+        <p class="svc-main">
+          Manufacturers and Exports of<br>
+          <strong>Air, Oil, Fuel and Hydraulic Filters</strong> for all<br>
+          Motor Vehicles and Industrial Equipment.
+        </p>
+      </div>
+      <div class="svc-card">
+        <p class="svc-main">Registered <span class="svc-highlight">Defence Contractors.</span></p>
+      </div>
+      <div class="svc-card">
+        <p class="svc-main">
+          Suppliers of Automotive Filters<br>
+          to the <span class="svc-sub">Pakistan Army.</span>
+        </p>
+      </div>
+      <div class="svc-card">
+        <p class="svc-main">Also to the <span class="svc-sub">Customer's Specifications.</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="wave-bottom">
+    <svg viewBox="0 0 1440 90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:90px;">
+      <path d="M0,60 Q360,0 720,40 Q1080,80 1440,20 L1440,90 L0,90 Z" fill="#f26522"/>
+      <path d="M0,70 Q400,20 800,55 Q1100,80 1440,35 L1440,90 L0,90 Z" fill="#e8231a" opacity="0.7"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ══════════════ PAGE 3: CONTACT ══════════════ -->
+<section id="contact">
+  <div class="corner-deco">
+    <svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
+      <path d="M220 0 L0 0 L220 130 Z" fill="#1a1a1a"/>
+      <path d="M220 0 L220 200 L60 200 Z" fill="#1a1a1a" opacity="0.5"/>
+      <path d="M220 80 Q160 120 220 200" stroke="#e8231a" stroke-width="10" fill="none"/>
+      <path d="M220 60 Q150 110 220 180" stroke="#f26522" stroke-width="6" fill="none" opacity="0.7"/>
+    </svg>
+  </div>
+
+  <div class="contact-inner">
+    <p class="section-label fade-in">Contact Us</p>
+    <div class="brand-name fade-in" style="transition-delay:0.1s">SPEED-FLO</div>
+    <p class="brand-subtitle fade-in" style="transition-delay:0.2s">Speed-Flo Filter Industries</p>
+    <div class="welcome-divider fade-in" style="transition-delay:0.3s; margin-top:10px;"></div>
+
+    <div class="contact-cards fade-in" style="transition-delay:0.4s">
+
+      <!-- Office -->
+      <div class="contact-card">
+        <div class="c-icon">
+          <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        </div>
+        <div>
+          <div class="c-label">Office / Mailing Address</div>
+          <div class="c-value">House # 60, Street # 2, Sector E,<br>DHA Phase II, Islamabad, Pakistan.</div>
+        </div>
+      </div>
+
+      <!-- Factory -->
+      <div class="contact-card">
+        <div class="c-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 10v7h3v-7H4zm6 0v7h3v-7h-3zm-8 9h18v-2H2v2zm14-9v7h3v-7h-3zM11.5 1L2 6v2h20V6l-9.5-5z"/></svg>
+        </div>
+        <div>
+          <div class="c-label">Factory Address</div>
+          <div class="c-value">Plot # 15, Street # S-3,<br>National Industrial Zone, Rawat, Rawalpindi.</div>
+        </div>
+      </div>
+
+      <!-- Landline -->
+      <div class="contact-card">
+        <div class="c-icon">
+          <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
+        </div>
+        <div>
+          <div class="c-label">Landline</div>
+          <div class="c-value">051-449900</div>
+        </div>
+      </div>
+
+      <!-- Mobile -->
+      <div class="contact-card">
+        <div class="c-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
+        </div>
+        <div>
+          <div class="c-label">Mobile</div>
+          <div class="c-value">0321-6337777</div>
+        </div>
+      </div>
+
+      <!-- Director -->
+      <div class="contact-card">
+        <div class="c-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+        </div>
+        <div>
+          <div class="c-label">Director</div>
+          <div class="c-value">Aurangzeb Mahmood</div>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="contact-card">
+        <div class="c-icon">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </div>
+        <div>
+          <div class="c-label">Email</div>
+          <div class="c-value"><a href="mailto:speedflofilters@gmail.com" style="color:var(--red);text-decoration:none;">speedflofilters@gmail.com</a></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="wave-bottom">
+    <svg viewBox="0 0 1440 90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="display:block;width:100%;height:90px;">
+      <path d="M0,60 Q360,0 720,40 Q1080,80 1440,20 L1440,90 L0,90 Z" fill="#f26522"/>
+      <path d="M0,70 Q400,20 800,55 Q1100,80 1440,35 L1440,90 L0,90 Z" fill="#e8231a" opacity="0.7"/>
+    </svg>
+  </div>
+</section>
+
+<footer>
+  &copy; 2024 <span>Speed-Flo Filter Industries</span> — All Rights Reserved &nbsp;|&nbsp; speedflofilters@gmail.com
+</footer>
+
+<script>
+  // Intersection Observer for fade-in animations
+  const targets = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  targets.forEach(el => observer.observe(el));
+
+  // Smooth active nav highlight
+  const sections = document.querySelectorAll('section');
+  const navLinks = document.querySelectorAll('.nav-links a');
+
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(a => a.style.color = '');
+        const active = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+        if (active) active.style.color = '#f26522';
+      }
+    });
+  }, { threshold: 0.5 });
+
+  sections.forEach(s => sectionObserver.observe(s));
+</script>
+</body>
+</html>
